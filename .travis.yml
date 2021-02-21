@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - 14
+cache:
+  directories:
+    - node_modules
+script:
+  - npm run build
+deploy:
+  # Use Github pages deploy process
+  provider: pages
+  # Keep builded pages
+  skip_cleanup: true
+  # Github security/auth token
+  github_token: $GITHUB_TOKEN
+  # Directory where your generated files are located
+  local_dir: build
+  on:
+    branch: main
