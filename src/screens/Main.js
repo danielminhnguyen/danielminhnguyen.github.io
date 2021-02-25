@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Particles from "react-particles-js";
 import classNames from "classnames";
@@ -30,6 +30,11 @@ import Project2 from "../assets/images/project2.png";
 import Project3 from "../assets/images/project3.png";
 import Project4 from "../assets/images/project4.png";
 import Project5 from "../assets/images/project5.png";
+import Project6 from "../assets/images/project6.png";
+import Project7 from "../assets/images/project7.png";
+import Project8 from "../assets/images/project8.png";
+
+import Profile from "../assets/images/profile.jpeg";
 import Contact from "../components/Contact";
 import SocialIcon from "../components/SocialIcon";
 
@@ -53,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#191919",
     height: 600,
     zIndex: 2,
+  },
+  about: {
+    height: 400,
   },
   section3: {
     backgroundColor: "#101010",
@@ -132,6 +140,11 @@ const useStyles = makeStyles((theme) => ({
   growth: {
     flexGrow: 1,
   },
+  profile: {
+    width: 300,
+    height: 300,
+    borderRadius: "50%",
+  },
 }));
 
 // constant
@@ -149,6 +162,10 @@ const skills = [
     level: 60,
   },
   {
+    name: "React Native",
+    level: 30,
+  },
+  {
     name: "NodeJs",
     level: 55,
   },
@@ -164,6 +181,10 @@ const skills = [
     name: "Wordpress",
     level: 65,
   },
+  {
+    name: "Node-RED",
+    level: 35,
+  },
 ];
 
 const projects = [
@@ -171,31 +192,50 @@ const projects = [
     background: Project1,
     title: "Tea 88",
     subtitle: "React / NAS Hosting",
-    link: "#",
+    link: "https://tea88.co.nz/",
   },
   {
     background: Project2,
     title: "Saigon Kingdom",
     subtitle: "Wordpress",
-    link: "#",
+    link: "https://www.saigonkingdom.co.nz/",
   },
   {
     background: Project3,
     title: "Maze Builder",
     subtitle: "Javascript",
-    link: "#",
+    link: "https://github.com/danielminhnguyen/maze-game",
   },
   {
     background: Project4,
     title: "Level Up Works",
     subtitle: "React / NodeJS",
-    link: "#",
+    link:
+      "https://github.com/danielminhnguyen/mr-misison4/blob/master/README.md",
   },
   {
     background: Project5,
-    title: "Turner (Study Project)",
+    title: "Mission 4 (Study Project)",
     subtitle: "React / NodeJS",
-    link: "#",
+    link: "https://github.com/danielminhnguyen/asd-mission4",
+  },
+  {
+    background: Project6,
+    title: "Mission 3 (Study Project)",
+    subtitle: "React-Native",
+    link: "https://github.com/danielminhnguyen/asd-mission3",
+  },
+  {
+    background: Project7,
+    title: "Mission 2 (Study Project)",
+    subtitle: "Node-RED",
+    link: "https://github.com/danielminhnguyen/asd-mission2",
+  },
+  {
+    background: Project8,
+    title: "Mission 1 (Study Project)",
+    subtitle: "Node-RED",
+    link: "https://github.com/danielminhnguyen/asd-mission1",
   },
 ];
 
@@ -231,11 +271,23 @@ export default function Main() {
   const classes = useStyles();
 
   const copyrightYear = new Date().getFullYear();
-  const [tabValue, setTabValue] = React.useState(0);
-
+  const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  const [expanded, setExpanded] = useState(false);
+  const [showLimit, setShowLimit] = useState(6);
+  const handleShowClick = () => {
+    if (showLimit === 6) {
+      setExpanded(true);
+      setShowLimit(projects.length);
+    } else {
+      setExpanded(false);
+      setShowLimit(6);
+    }
+  };
+
   return (
     <div>
       <TopNav />
@@ -278,8 +330,10 @@ export default function Main() {
       <div className={classes.section2}>
         <div id="section2" className="anchor" />
         <Grid container>
-          <Grid item xs={4}></Grid>
-          <Grid item xs={8}>
+          <Grid item xs={4} className="row">
+            <CardMedia image={Profile} className={classes.profile} />
+          </Grid>
+          <Grid item xs={8} className={classes.about}>
             <Typography
               variant="h2"
               color="textPrimary"
@@ -342,9 +396,9 @@ export default function Main() {
         >
           My Latest Project
         </Typography>
-        <div>
+        <div className="column">
           <Grid container className={classNames(classes.projectContainer)}>
-            {projects.map((project) => (
+            {projects.slice(0, showLimit).map((project) => (
               <Grid item xs={12} md={6} lg={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -365,7 +419,11 @@ export default function Main() {
                       {project.title}
                     </Typography>
                     <CardActions>
-                      <Button variant="outlined" size="small">
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        href={project.link}
+                      >
                         View Details
                       </Button>
                     </CardActions>
@@ -374,6 +432,15 @@ export default function Main() {
               </Grid>
             ))}
           </Grid>
+          <Box mt={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleShowClick}
+            >
+              {expanded ? <>Show Less</> : <>Show More</>}
+            </Button>
+          </Box>
         </div>
       </div>
 
