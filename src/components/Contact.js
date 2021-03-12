@@ -41,7 +41,7 @@ export default function Contact() {
   const USER_ID = process.env.REACT_APP_USER_ID;
 
   const handleChangeEmail = (e) => {
-    console.log(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
+    // console.log(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value));
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value)) {
       setEmail(e.target.value);
       setEmailError(true);
@@ -56,6 +56,7 @@ export default function Contact() {
   };
 
   const formSubmit = async (e) => {
+    // console.log(USER_ID);
     e.preventDefault();
     if (!emailError) {
       emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, e.target, USER_ID).then(

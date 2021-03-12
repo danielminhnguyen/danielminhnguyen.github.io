@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Particles from "react-particles-js";
 import classNames from "classnames";
@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import TopNav from "../components/TopNav";
 
 // material UI module
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   Box,
   Button,
@@ -22,21 +22,17 @@ import {
   Tabs,
   Toolbar,
   Typography,
+  useMediaQuery,
 } from "@material-ui/core";
 
 // graphics
-import Project1 from "../assets/images/project1.png";
-import Project2 from "../assets/images/project2.png";
-import Project3 from "../assets/images/project3.png";
-import Project4 from "../assets/images/project4.png";
-import Project5 from "../assets/images/project5.png";
-import Project6 from "../assets/images/project6.png";
-import Project7 from "../assets/images/project7.png";
-import Project8 from "../assets/images/project8.png";
 
 import Profile from "../assets/images/profile.jpeg";
 import Contact from "../components/Contact";
 import SocialIcon from "../components/SocialIcon";
+
+import { skills } from "../constants/Skills";
+import { projects } from "../constants/Projects";
 
 const useStyles = makeStyles((theme) => ({
   introContainer: {
@@ -47,20 +43,27 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     marginLeft: theme.spacing(10),
     marginTop: theme.spacing(25),
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(1),
+      marginTop: theme.spacing(30),
+    },
   },
   subtitle: {},
   section1: {
     backgroundColor: "#101010",
-    height: 700,
+    minHeight: 700,
     overflow: "hidden",
+    [theme.breakpoints.down("xs")]: {
+      minHeight: 400,
+    },
   },
   section2: {
     backgroundColor: "#191919",
-    height: 600,
+    minHeight: 600,
     zIndex: 2,
   },
   about: {
-    height: 400,
+    minHeight: 400,
   },
   section3: {
     backgroundColor: "#101010",
@@ -84,9 +87,18 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 300,
     paddingTop: 50,
     paddingBottom: 50,
+    [theme.breakpoints.down("sm")]: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+    },
   },
-  projectContainer: {
+  sectionContainer: {
     maxWidth: 1200,
+    display: "flex",
+    flexDirection: "row",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+    },
   },
   particles: {
     zIndex: 1,
@@ -112,6 +124,14 @@ const useStyles = makeStyles((theme) => ({
       transition: "transform .5s ease",
       transform: "scale(1.1)",
       border: "2px red solid",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: 250,
+      height: 400,
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: 250,
+      height: 400,
     },
   },
   cardMedia: {
@@ -144,100 +164,13 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     height: 300,
     borderRadius: "50%",
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 40,
+      width: 200,
+      height: 200,
+    },
   },
 }));
-
-// constant
-const skills = [
-  {
-    name: "Javascript",
-    level: 65,
-  },
-  {
-    name: "AI / Photoshop",
-    level: 45,
-  },
-  {
-    name: "React/Redux",
-    level: 60,
-  },
-  {
-    name: "React Native",
-    level: 30,
-  },
-  {
-    name: "NodeJs",
-    level: 55,
-  },
-  {
-    name: "Python",
-    level: 60,
-  },
-  {
-    name: "HTML / CSS",
-    level: 70,
-  },
-  {
-    name: "Wordpress",
-    level: 65,
-  },
-  {
-    name: "Node-RED",
-    level: 35,
-  },
-];
-
-const projects = [
-  {
-    background: Project1,
-    title: "Tea 88",
-    subtitle: "React / NAS Hosting",
-    link: "https://tea88.co.nz/",
-  },
-  {
-    background: Project2,
-    title: "Saigon Kingdom",
-    subtitle: "Wordpress",
-    link: "https://www.saigonkingdom.co.nz/",
-  },
-  {
-    background: Project3,
-    title: "Maze Builder",
-    subtitle: "Javascript",
-    link: "https://github.com/danielminhnguyen/maze-game",
-  },
-  {
-    background: Project4,
-    title: "Level Up Works",
-    subtitle: "React / NodeJS",
-    link:
-      "https://github.com/danielminhnguyen/mr-misison4/blob/master/README.md",
-  },
-  {
-    background: Project5,
-    title: "Mission 4 (Study Project)",
-    subtitle: "React / NodeJS",
-    link: "https://github.com/danielminhnguyen/asd-mission4",
-  },
-  {
-    background: Project6,
-    title: "Mission 3 (Study Project)",
-    subtitle: "React-Native",
-    link: "https://github.com/danielminhnguyen/asd-mission3",
-  },
-  {
-    background: Project7,
-    title: "Mission 2 (Study Project)",
-    subtitle: "Node-RED",
-    link: "https://github.com/danielminhnguyen/asd-mission2",
-  },
-  {
-    background: Project8,
-    title: "Mission 1 (Study Project)",
-    subtitle: "Node-RED",
-    link: "https://github.com/danielminhnguyen/asd-mission1",
-  },
-];
 
 // Tab Panel sections
 function TabPanel(props) {
@@ -288,6 +221,19 @@ export default function Main() {
     }
   };
 
+  const [particle, setParticle] = useState(100);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    if (matches) {
+      setParticle(30);
+      setShowLimit(2);
+    } else {
+      setParticle(100);
+    }
+  }, [matches]);
+
   return (
     <div>
       <TopNav />
@@ -309,7 +255,7 @@ export default function Main() {
           params={{
             particles: {
               number: {
-                value: 100,
+                value: particle,
               },
               size: {
                 value: 5,
@@ -329,62 +275,70 @@ export default function Main() {
 
       <div className={classes.section2}>
         <div id="section2" className="anchor" />
-        <Grid container>
-          <Grid item xs={4} className="row">
-            <CardMedia image={Profile} className={classes.profile} />
-          </Grid>
-          <Grid item xs={8} className={classes.about}>
-            <Typography
-              variant="h2"
-              color="textPrimary"
-              className={classes.sectionTitle}
-            >
-              About Me
-            </Typography>
+        <div>
+          <Grid container>
+            <Grid item xs={12} md={5} className="row">
+              <CardMedia image={Profile} className={classes.profile} />
+            </Grid>
+            <Grid item xs={12} md={7} className={classes.about}>
+              <Typography
+                variant="h2"
+                color="textPrimary"
+                className={classes.sectionTitle}
+                align="center"
+              >
+                About Me
+              </Typography>
 
-            <Tabs
-              value={tabValue}
-              onChange={handleChange}
-              aria-label="simple tabs example"
-            >
-              <Tab label="Main Skills" {...a11yProps(0)} />
-              <Tab label="Certifications" {...a11yProps(1)} />
-            </Tabs>
+              <Tabs
+                value={tabValue}
+                onChange={handleChange}
+                aria-label="simple tabs example"
+              >
+                <Tab label="Main Skills" {...a11yProps(0)} />
+                <Tab label="Certifications" {...a11yProps(1)} />
+              </Tabs>
 
-            <TabPanel value={tabValue} index={0}>
-              <motion.div animate={{ x: 100 }} />
-              <div className={classes.progressBarContainer}>
-                {skills.map((skill) => (
-                  <Grid container display="flex" alignItems="center">
-                    <Grid item xs={4}>
-                      <Typography className={classes.skillTitle} variant="h5">
-                        {skill.name}
-                      </Typography>
+              <TabPanel value={tabValue} index={0}>
+                <motion.div animate={{ x: 100 }} />
+                <div className={classes.progressBarContainer}>
+                  {skills.map((skill) => (
+                    <Grid
+                      key={skill.name}
+                      container
+                      display="flex"
+                      alignItems="center"
+                    >
+                      <Grid item xs={4}>
+                        <Typography className={classes.skillTitle} variant="h5">
+                          {skill.name}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={8}>
+                        <LinearProgress
+                          color="primary"
+                          variant="determinate"
+                          value={skill.level}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={8}>
-                      <LinearProgress
-                        color="primary"
-                        variant="determinate"
-                        value={skill.level}
-                      />
-                    </Grid>
-                  </Grid>
-                ))}
-              </div>
-            </TabPanel>
-            <TabPanel value={tabValue} index={1}>
-              <Typography className={classes.skillTitle} variant="h5">
-                Bachelor of Accounting & Finance - Monash Univerity
-              </Typography>
-              <Typography className={classes.skillTitle} variant="h5">
-                Full Stack Developer - Mission Ready
-              </Typography>
-              <Typography className={classes.skillTitle} variant="h5">
-                Advanced Software Developer (On-Going) - Mission Ready
-              </Typography>
-            </TabPanel>
+                  ))}
+                </div>
+              </TabPanel>
+              <TabPanel value={tabValue} index={1}>
+                <Typography className={classes.skillTitle} variant="h5">
+                  Bachelor of Accounting & Finance - Monash Univerity
+                </Typography>
+                <Typography className={classes.skillTitle} variant="h5">
+                  Full Stack Developer - Mission Ready
+                </Typography>
+                <Typography className={classes.skillTitle} variant="h5">
+                  Advanced Software Developer (On-Going) - Mission Ready
+                </Typography>
+              </TabPanel>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
       </div>
 
       <div className={classes.section3}>
@@ -397,9 +351,12 @@ export default function Main() {
           My Latest Project
         </Typography>
         <div className="column">
-          <Grid container className={classNames(classes.projectContainer)}>
+          <Grid
+            container
+            className={classNames(classes.sectionContainer, "column")}
+          >
             {projects.slice(0, showLimit).map((project) => (
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid key={project.title} item xs={12} sm={6} md={6} lg={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     image={project.background}

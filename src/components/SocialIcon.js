@@ -6,10 +6,10 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 export default function SocialIcon() {
   return (
     <>
-      <IconButton>
+      <IconButton href="https://github.com/danielminhnguyen">
         <GitHubIcon />
       </IconButton>
-      <IconButton>
+      <IconButton href="https://www.linkedin.com/in/danielminhnguyen/">
         <LinkedInIcon />
       </IconButton>
     </>

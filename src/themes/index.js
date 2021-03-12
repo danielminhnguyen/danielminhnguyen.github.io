@@ -29,7 +29,7 @@ const overrides = {
     },
     h5: {
       fontWeight: 500,
-      fontSize: "1.285rem",
+      fontSize: "1.4rem",
     },
     h6: {
       fontSize: "1.142rem",
@@ -41,4 +41,47 @@ const overrides = {
   },
 };
 
-export const defaultTheme = createMuiTheme({ ...theme, ...overrides });
+const overideTheme = createMuiTheme({ ...theme, ...overrides });
+
+const { breakpoints } = overideTheme;
+
+export const defaultTheme = {
+  ...overideTheme,
+  overrides: {
+    MuiTypography: {
+      h1: {
+        fontSize: "5rem",
+        fontWeight: 900,
+        [breakpoints.down("xs")]: {
+          fontSize: "1.8rem",
+        },
+      },
+      h2: {
+        [breakpoints.down("xs")]: {
+          fontSize: "1.4rem",
+        },
+      },
+      h3: {
+        [breakpoints.down("xs")]: {
+          fontSize: "2rem",
+        },
+      },
+      h4: {
+        [breakpoints.down("xs")]: {
+          fontSize: "2rem",
+        },
+      },
+      h5: {
+        [breakpoints.down("xs")]: {
+          fontSize: "1rem",
+        },
+      },
+      body2: {
+        [breakpoints.down("xs")]: {
+          fontWeight: 600,
+          fontSize: "0.8rem",
+        },
+      },
+    },
+  },
+};
