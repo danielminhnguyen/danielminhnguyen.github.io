@@ -48,6 +48,12 @@ const { breakpoints } = overideTheme;
 export const defaultTheme = {
   ...overideTheme,
   overrides: {
+    tabs: {
+      "& .MuiTab-wrapper": {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+      },
+    },
     MuiTypography: {
       h1: {
         fontSize: "5rem",

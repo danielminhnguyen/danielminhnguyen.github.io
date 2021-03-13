@@ -17,7 +17,6 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  LinearProgress,
   Tab,
   Tabs,
   Toolbar,
@@ -33,6 +32,9 @@ import SocialIcon from "../components/SocialIcon";
 
 import { skills } from "../constants/Skills";
 import { projects } from "../constants/Projects";
+import { MotionProgressBar } from "../components/Motion/MotionProgressBar";
+import Typist from "react-typist";
+import { getWeekDay } from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   introContainer: {
@@ -164,11 +166,21 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     height: 300,
     borderRadius: "50%",
+    marginTop: 100,
     [theme.breakpoints.down("xs")]: {
       marginTop: 40,
       width: 200,
       height: 200,
     },
+  },
+  profileContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  punchLine: {
+    display: "flex",
+    flexDirection: "row",
   },
 }));
 
@@ -203,7 +215,12 @@ function a11yProps(index) {
 export default function Main() {
   const classes = useStyles();
 
-  const copyrightYear = new Date().getFullYear();
+  const today = new Date();
+
+  const copyrightYear = today.getFullYear();
+  const dayOfWeek = getWeekDay(today);
+
+  console.log("day" + dayOfWeek);
   const [tabValue, setTabValue] = useState(0);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -224,6 +241,9 @@ export default function Main() {
   const [particle, setParticle] = useState(100);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const [now, setNow] = useState(new Date());
+  const onTypingDone = () => setNow(new Date());
 
   useEffect(() => {
     if (matches) {
@@ -277,65 +297,77 @@ export default function Main() {
         <div id="section2" className="anchor" />
         <div>
           <Grid container>
-            <Grid item xs={12} md={5} className="row">
-              <CardMedia image={Profile} className={classes.profile} />
+            <Grid item xs={12} md={5} className={classes.profileContainer}>
+              <motion.div initial={{ x: -200 }} animate={{ x: 0 }}>
+                <CardMedia image={Profile} className={classes.profile} />
+              </motion.div>
             </Grid>
             <Grid item xs={12} md={7} className={classes.about}>
-              <Typography
-                variant="h2"
-                color="textPrimary"
-                className={classes.sectionTitle}
-                align="center"
-              >
-                About Me
-              </Typography>
+              <motion.div initial={{ x: 200 }} animate={{ x: 0 }}>
+                <Typography
+                  variant="h2"
+                  color="textPrimary"
+                  className={classes.sectionTitle}
+                  align="center"
+                >
+                  About Me
+                </Typography>
 
-              <Tabs
-                value={tabValue}
-                onChange={handleChange}
-                aria-label="simple tabs example"
-              >
-                <Tab label="Main Skills" {...a11yProps(0)} />
-                <Tab label="Certifications" {...a11yProps(1)} />
-              </Tabs>
+                <Tabs
+                  value={tabValue}
+                  onChange={handleChange}
+                  aria-label="simple tabs example"
+                >
+                  <Tab
+                    label={<Typography variant="h4">Main Skills</Typography>}
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    label={<Typography variant="h4">Certifications</Typography>}
+                    {...a11yProps(1)}
+                  />
+                </Tabs>
 
-              <TabPanel value={tabValue} index={0}>
-                <motion.div animate={{ x: 100 }} />
-                <div className={classes.progressBarContainer}>
-                  {skills.map((skill) => (
-                    <Grid
-                      key={skill.name}
-                      container
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <Grid item xs={4}>
-                        <Typography className={classes.skillTitle} variant="h5">
-                          {skill.name}
-                        </Typography>
+                <TabPanel value={tabValue} index={0}>
+                  <div className={classes.progressBarContainer}>
+                    {skills.map((skill) => (
+                      <Grid
+                        key={skill.name}
+                        container
+                        display="flex"
+                        alignItems="center"
+                      >
+                        <Grid item xs={4}>
+                          <Typography
+                            className={classes.skillTitle}
+                            variant="h5"
+                          >
+                            {skill.name}
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                          <MotionProgressBar
+                            percents={skill.level}
+                            barWidth={400}
+                            barHeight={8}
+                          />
+                        </Grid>
                       </Grid>
-                      <Grid item xs={8}>
-                        <LinearProgress
-                          color="primary"
-                          variant="determinate"
-                          value={skill.level}
-                        />
-                      </Grid>
-                    </Grid>
-                  ))}
-                </div>
-              </TabPanel>
-              <TabPanel value={tabValue} index={1}>
-                <Typography className={classes.skillTitle} variant="h5">
-                  Bachelor of Accounting & Finance - Monash Univerity
-                </Typography>
-                <Typography className={classes.skillTitle} variant="h5">
-                  Full Stack Developer - Mission Ready
-                </Typography>
-                <Typography className={classes.skillTitle} variant="h5">
-                  Advanced Software Developer (On-Going) - Mission Ready
-                </Typography>
-              </TabPanel>
+                    ))}
+                  </div>
+                </TabPanel>
+                <TabPanel value={tabValue} index={1}>
+                  <Typography className={classes.skillTitle} variant="h5">
+                    Bachelor of Accounting & Finance - Monash Univerity
+                  </Typography>
+                  <Typography className={classes.skillTitle} variant="h5">
+                    Full Stack Developer - Mission Ready
+                  </Typography>
+                  <Typography className={classes.skillTitle} variant="h5">
+                    Advanced Software Developer (On-Going) - Mission Ready
+                  </Typography>
+                </TabPanel>
+              </motion.div>
             </Grid>
           </Grid>
         </div>
@@ -404,7 +436,7 @@ export default function Main() {
       <div className={classes.section4}>
         <div id="section4" className="anchor" />
         <Grid container>
-          <Grid item xs={6} className={classes.contact}>
+          <Grid item xs={12} md={6} className={classes.contact}>
             <Typography
               variant="h2"
               color="textPrimary"
@@ -415,6 +447,30 @@ export default function Main() {
             <Contact />
           </Grid>
           <Grid item xs={6}></Grid>
+          <Grid item xs={12}>
+            <Box mt={4}>
+              <div className="column">
+                <div className="row">
+                  <span>Have an&nbsp;</span>
+                  <Typist
+                    avgTypingDelay={50}
+                    onTypingDone={onTypingDone}
+                    key={now}
+                  >
+                    <span>awesome</span>
+                    <Typist.Backspace count={8} delay={4000} />
+                    <span>amazing</span>
+                    <Typist.Backspace count={8} delay={4000} />
+                    <span>extraordinary</span>
+                    <Typist.Backspace count={14} delay={4000} />{" "}
+                    <span>astounding</span>
+                    <Typist.Backspace count={11} delay={4000} />
+                  </Typist>
+                  <span>{dayOfWeek}!</span>
+                </div>
+              </div>
+            </Box>
+          </Grid>
         </Grid>
       </div>
 

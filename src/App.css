@@ -11,6 +11,10 @@ a:hover {
   color: inherit;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 .anchor {
   display: block;
   position: relative;
@@ -61,7 +65,7 @@ a:hover {
 }
 
 .activeNav {
-  border-bottom: solid 2px red;
+  border-bottom: solid 3px red;
 }
 
 .buttonMobile {
@@ -83,4 +87,24 @@ a:hover {
 li {
   list-style: none;
   cursor: pointer;
+}
+
+.Typist .Cursor {
+  display: inline-block;
+}
+.Typist .Cursor--blinking {
+  opacity: 1;
+  animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

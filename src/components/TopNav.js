@@ -124,7 +124,6 @@ export default function TopNav() {
       <AppBar
         position="sticky"
         className={classNames(classes[navRef.current], classes.appBar)}
-        // currentClassName="is-active"
         color="transparent"
       >
         <Toolbar>
