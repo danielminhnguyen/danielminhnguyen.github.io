@@ -69,12 +69,12 @@ export const defaultTheme = {
       },
       h3: {
         [breakpoints.down("xs")]: {
-          fontSize: "2rem",
+          fontSize: "1.2rem",
         },
       },
       h4: {
         [breakpoints.down("xs")]: {
-          fontSize: "2rem",
+          fontSize: "1.1rem",
         },
       },
       h5: {
