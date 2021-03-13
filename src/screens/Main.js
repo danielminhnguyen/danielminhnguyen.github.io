@@ -239,6 +239,7 @@ export default function Main() {
   };
 
   const [particle, setParticle] = useState(100);
+  const [barWidth, setBarWidth] = useState(400);
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -249,8 +250,11 @@ export default function Main() {
     if (matches) {
       setParticle(30);
       setShowLimit(2);
+      setBarWidth(250);
     } else {
       setParticle(100);
+      setShowLimit(6);
+      setBarWidth(400);
     }
   }, [matches]);
 
@@ -348,7 +352,7 @@ export default function Main() {
                         <Grid item xs={8}>
                           <MotionProgressBar
                             percents={skill.level}
-                            barWidth={400}
+                            barWidth={barWidth}
                             barHeight={8}
                           />
                         </Grid>
